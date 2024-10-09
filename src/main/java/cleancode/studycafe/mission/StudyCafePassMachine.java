@@ -21,17 +21,7 @@ public class StudyCafePassMachine {
             outputHandler.showWelcomeMessage();
             outputHandler.showAnnouncement();
 
-            outputHandler.askPassTypeSelection();
-            StudyCafePassType studyCafePassType = inputHandler.getPassTypeSelectingUserAction();
-
-
-            //기간에 따라 패스 종류 보여주기, 패스 입력받기
-            List<StudyCafePass> studyCafePasses = studyCafeFileHandler.readStudyCafePasses();
-            List<StudyCafePass> availablePasses = studyCafePasses.stream()
-                    .filter(studyCafePass -> studyCafePass.getPassType() == studyCafePassType)
-                    .toList();
-            outputHandler.showPassListForSelection(availablePasses);
-            StudyCafePass selectedPass = inputHandler.getSelectPass(availablePasses);
+            StudyCafePass selectedPass = showAndSelectPass();
 
             StudyCafeLockerPass lockerPass = showAndSelectLockerPass(selectedPass);
 
@@ -45,6 +35,24 @@ public class StudyCafePassMachine {
         }
     }
 
+    private StudyCafePass showAndSelectPass() {
+        outputHandler.askPassTypeSelection();
+        StudyCafePassType studyCafePassType = inputHandler.getPassTypeSelectingUserAction();
+        
+        //기간에 따라 패스 종류 보여주기, 패스 입력받기
+        List<StudyCafePass> availablePasses = findAvailablePassBy(studyCafePassType);
+        outputHandler.showPassListForSelection(availablePasses);
+        StudyCafePass selectedPass = inputHandler.getSelectPass(availablePasses);
+        return selectedPass;
+    }
+
+    private List<StudyCafePass> findAvailablePassBy(StudyCafePassType studyCafePassType) {
+        List<StudyCafePass> allPasses = studyCafeFileHandler.readStudyCafePasses();
+        return allPasses.stream()
+                .filter(studyCafePass -> studyCafePass.getPassType() == studyCafePassType)
+                .toList();
+    }
+
     private StudyCafeLockerPass showAndSelectLockerPass(StudyCafePass selectedPass) {
 
         //패스가 hourly나 weekly인경우 락커 이용 불가 락커 패스는 무조건 null반환
@@ -52,14 +60,7 @@ public class StudyCafePassMachine {
             return null;
         }
 
-        List<StudyCafeLockerPass> lockerPasses = studyCafeFileHandler.readLockerPasses();
-        StudyCafeLockerPass availableLockerPass = lockerPasses.stream()
-                .filter(option ->
-                        option.getPassType() == selectedPass.getPassType() //고정석인지
-                                && option.getDuration() == selectedPass.getDuration() //기간 옵션
-                )
-                .findFirst() //기간에 따른 락커 패스 찾기
-                .orElse(null);
+        StudyCafeLockerPass availableLockerPass = findAvailableLockerBy(selectedPass);
 
         //어떤 락커 패스 이용하는지, 혹은 이용하지 않는지
         if (availableLockerPass != null) {
@@ -72,6 +73,17 @@ public class StudyCafePassMachine {
         }
         return availableLockerPass;
 
+    }
+
+    private StudyCafeLockerPass findAvailableLockerBy(StudyCafePass pass) {
+        List<StudyCafeLockerPass> alllockerPasses = studyCafeFileHandler.readLockerPasses();
+        return alllockerPasses.stream()
+                .filter(lockerPass ->
+                        lockerPass.getPassType() == pass.getPassType() //고정석인지
+                                && lockerPass.getDuration() == pass.getDuration() //기간 옵션
+                )
+                .findFirst() //기간에 따른 락커 패스 찾기
+                .orElse(null);
     }
 
 }
