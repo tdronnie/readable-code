@@ -1,8 +1,8 @@
 package cleancode.studycafe.mission.io;
 
-import cleancode.studycafe.tobe.exception.AppException;
-import cleancode.studycafe.tobe.model.StudyCafePass;
-import cleancode.studycafe.tobe.model.StudyCafePassType;
+import cleancode.studycafe.mission.exception.AppException;
+import cleancode.studycafe.mission.model.StudyCafePass;
+import cleancode.studycafe.mission.model.StudyCafePassType;
 
 import java.util.List;
 import java.util.Scanner;
