@@ -56,19 +56,21 @@ public class StudyCafePassMachine {
             return Optional.empty();
         }
 
-        StudyCafeLockerPass lockerPassCandidate = findLockerPassCandidateBy(selectedPass);
+        Optional<StudyCafeLockerPass> lockerPassCandidate = findLockerPassCandidateBy(selectedPass);
 
-        if (lockerPassCandidate != null) {
-            boolean isLockerSelected = ioHandler.askLockerPassSelecting(lockerPassCandidate);
+        if (lockerPassCandidate.isPresent()) {
+            StudyCafeLockerPass lockerPass = lockerPassCandidate.get();
+
+            boolean isLockerSelected = ioHandler.askLockerPassSelecting(lockerPass);
             if(isLockerSelected) {
-                return Optional.of(lockerPassCandidate); //Optional로 감싸서 넘긴다.
+                return Optional.of(lockerPass); //Optional로 감싸서 넘긴다.
             }
         }
         return Optional.empty();
     }
 
     //Fixed패스, 사물함 이용 선택 후 가능한 이용권만 리턴하는 메서드
-    private StudyCafeLockerPass findLockerPassCandidateBy(StudyCafePass pass) {
+    private Optional<StudyCafeLockerPass> findLockerPassCandidateBy(StudyCafePass pass) {
         StudyCafeLockerPasses allLockerPasses = studyCafeFileHandler.readLockerPasses();
         return allLockerPasses.findLockerPassBy(pass);
     }
