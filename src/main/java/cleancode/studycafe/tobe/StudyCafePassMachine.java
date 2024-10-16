@@ -9,6 +9,7 @@ import cleancode.studycafe.tobe.model.StudyCafePass;
 import cleancode.studycafe.tobe.model.StudyCafePassType;
 
 import java.util.List;
+import java.util.Optional;
 
 public class StudyCafePassMachine {
 
@@ -23,9 +24,15 @@ public class StudyCafePassMachine {
 
             StudyCafePass selectedPass = selectPass();
 
-            StudyCafeLockerPass lockerPass = selectLockerPass(selectedPass);
+            Optional<StudyCafeLockerPass> optionalLockerPass = selectLockerPass(selectedPass);
 
-            outputHandler.showPassOrderSummary(selectedPass, lockerPass);
+            //Optional 객체에 대해 값이 있을 경우 꺼내서 사용
+            if(optionalLockerPass.isPresent()){
+                outputHandler.showPassOrderSummary(selectedPass, optionalLockerPass.get());
+            } else{
+                outputHandler.showPassOrderSummary(selectedPass, null);
+            }
+
         } catch (AppException e) {
             outputHandler.showSimpleMessage(e.getMessage());
         } catch (Exception e) {
@@ -54,9 +61,9 @@ public class StudyCafePassMachine {
     }
 
     //Fixed패스 경우만 사물함 이용권 정하는 메서드
-    private StudyCafeLockerPass selectLockerPass(StudyCafePass selectedPass) {
+    private Optional<StudyCafeLockerPass> selectLockerPass(StudyCafePass selectedPass) {
         if(selectedPass.getPassType() != StudyCafePassType.FIXED){
-            return null;
+            return Optional.empty();
         }
 
         StudyCafeLockerPass lockerPassCandidate = findLockerPassCandidateBy(selectedPass);
@@ -67,10 +74,10 @@ public class StudyCafePassMachine {
             boolean isLockerSelected = inputHandler.getLockerSelection();
 
             if(isLockerSelected) {
-                return lockerPassCandidate;
+                return Optional.of(lockerPassCandidate); //Optional로 감싸서 넘긴다.
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     //Fixed패스, 사물함 이용 선택 후 가능한 이용권만 리턴하는 메서드
