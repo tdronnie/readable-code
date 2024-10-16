@@ -14,10 +14,12 @@ import java.util.List;
 
 public class SeatPassFileReader implements SeatPassProvier {
 
+    private static final String PASS_LIST_CSV_PATH = "src/main/resources/cleancode/studycafe/pass-list.csv";
+
     @Override
     public StudyCafeSeatPasses getSeatPasses() {
         try {
-            List<String> lines = Files.readAllLines(Paths.get("src/main/resources/cleancode/studycafe/pass-list.csv"));
+            List<String> lines = Files.readAllLines(Paths.get(PASS_LIST_CSV_PATH));
             List<StudyCafeSeatPass> studyCafeSeatPasses = new ArrayList<>();
             for (String line : lines) {
                 String[] values = line.split(",");
