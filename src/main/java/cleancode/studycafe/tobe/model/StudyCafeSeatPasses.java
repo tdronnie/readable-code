@@ -2,20 +2,20 @@ package cleancode.studycafe.tobe.model;
 
 import java.util.List;
 
-public class StudyCafePasses {
+public class StudyCafeSeatPasses {
 
-    private final List<StudyCafePass> passes;
+    private final List<StudyCafeSeatPass> passes;
 
-    private StudyCafePasses(List<StudyCafePass> passes) {
+    private StudyCafeSeatPasses(List<StudyCafeSeatPass> passes) {
         this.passes = passes;
     }
 
-    public static StudyCafePasses of(List<StudyCafePass> passes) {
-        return new StudyCafePasses(passes);
+    public static StudyCafeSeatPasses of(List<StudyCafeSeatPass> passes) {
+        return new StudyCafeSeatPasses(passes);
     }
 
     //이후 passType에 대한 StudyCafePass 리스트가 잘 나오는지 테스트 추가 필요!
-    public List<StudyCafePass> findPassBy(StudyCafePassType studyCafePassType) {
+    public List<StudyCafeSeatPass> findPassBy(StudyCafePassType studyCafePassType) {
         return passes.stream()
                 .filter(studyCafePass -> studyCafePass.isSamePassType(studyCafePassType))
                 .toList();

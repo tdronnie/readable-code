@@ -18,7 +18,7 @@ public class StudyCafePassMachine {
             ioHandler.showWelcomeMessage();
             ioHandler.showAnnouncement();
 
-            StudyCafePass selectedPass = selectPass();
+            StudyCafeSeatPass selectedPass = selectPass();
 
             Optional<StudyCafeLockerPass> optionalLockerPass = selectLockerPass(selectedPass);
 
@@ -36,21 +36,21 @@ public class StudyCafePassMachine {
     }
 
     //이용할 패스 정하는 메서드
-    private StudyCafePass selectPass() {
+    private StudyCafeSeatPass selectPass() {
         StudyCafePassType passType = ioHandler.askPassTypeSelecting();
-        List<StudyCafePass> passCandidates = findPassCandidatesBy(passType);
+        List<StudyCafeSeatPass> passCandidates = findPassCandidatesBy(passType);
 
         return ioHandler.askPassSelecting(passCandidates);
     }
 
     //패스 선택 후 가능한 이용권들만 리턴하는 메서드
-    private List<StudyCafePass> findPassCandidatesBy(StudyCafePassType studyCafePassType) {
-        StudyCafePasses allPasses = studyCafeFileHandler.readStudyCafePasses();
+    private List<StudyCafeSeatPass> findPassCandidatesBy(StudyCafePassType studyCafePassType) {
+        StudyCafeSeatPasses allPasses = studyCafeFileHandler.readStudyCafePasses();
         return allPasses.findPassBy(studyCafePassType);
     }
 
     //Fixed패스 경우만 사물함 이용권 정하는 메서드
-    private Optional<StudyCafeLockerPass> selectLockerPass(StudyCafePass selectedPass) {
+    private Optional<StudyCafeLockerPass> selectLockerPass(StudyCafeSeatPass selectedPass) {
         //Fixed 패스가 아닌가? -> 사물함 옵션을 사용할 수 있는 타입이 아닌가? (필요한 관심사)
         if(selectedPass.cannotUseLocker()){
             return Optional.empty();
@@ -70,7 +70,7 @@ public class StudyCafePassMachine {
     }
 
     //Fixed패스, 사물함 이용 선택 후 가능한 이용권만 리턴하는 메서드
-    private Optional<StudyCafeLockerPass> findLockerPassCandidateBy(StudyCafePass pass) {
+    private Optional<StudyCafeLockerPass> findLockerPassCandidateBy(StudyCafeSeatPass pass) {
         StudyCafeLockerPasses allLockerPasses = studyCafeFileHandler.readLockerPasses();
         return allLockerPasses.findLockerPassBy(pass);
     }

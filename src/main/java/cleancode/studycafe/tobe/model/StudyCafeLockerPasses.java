@@ -16,7 +16,7 @@ public class StudyCafeLockerPasses {
     }
 
     //이후 pass에 대한 lockerPass 리스트가 잘 나오는지 테스트 추가 필요!
-    public Optional<StudyCafeLockerPass> findLockerPassBy(StudyCafePass pass) {
+    public Optional<StudyCafeLockerPass> findLockerPassBy(StudyCafeSeatPass pass) {
         return lockerPasses.stream()
                 .filter(pass::isSameDurationType)
                 .findFirst();
