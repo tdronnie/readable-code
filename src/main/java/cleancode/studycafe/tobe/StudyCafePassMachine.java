@@ -27,11 +27,10 @@ public class StudyCafePassMachine {
             Optional<StudyCafeLockerPass> optionalLockerPass = selectLockerPass(selectedPass);
 
             //Optional 객체에 대해 값이 있을 경우 꺼내서 사용
-            if(optionalLockerPass.isPresent()){
-                outputHandler.showPassOrderSummary(selectedPass, optionalLockerPass.get());
-            } else{
-                outputHandler.showPassOrderSummary(selectedPass, null);
-            }
+            optionalLockerPass.ifPresentOrElse( //consumer타입, runnable타입 파라미터 필요
+                    lockerPass -> outputHandler.showPassOrderSummary(selectedPass, lockerPass),
+                    () -> outputHandler.showPassOrderSummary(selectedPass, null)
+            );
 
         } catch (AppException e) {
             outputHandler.showSimpleMessage(e.getMessage());
