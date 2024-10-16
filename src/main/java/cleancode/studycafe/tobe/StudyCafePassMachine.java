@@ -1,6 +1,7 @@
 package cleancode.studycafe.tobe;
 
 import cleancode.studycafe.tobe.exception.AppException;
+import cleancode.studycafe.tobe.io.PassReader;
 import cleancode.studycafe.tobe.io.StudyCafeFileHandler;
 import cleancode.studycafe.tobe.io.StudyCafeIOHandler;
 import cleancode.studycafe.tobe.model.order.StudyCafePassOrder;
@@ -14,7 +15,11 @@ import java.util.Optional;
 public class StudyCafePassMachine {
 
     private final StudyCafeIOHandler ioHandler = new StudyCafeIOHandler();
-    private final StudyCafeFileHandler studyCafeFileHandler = new StudyCafeFileHandler();
+    private final PassReader passReader;
+
+    public StudyCafePassMachine(PassReader passReader) {
+        this.passReader = passReader;
+    }
 
     public void run() {
         try {
@@ -46,7 +51,7 @@ public class StudyCafePassMachine {
 
     //패스 선택 후 가능한 이용권들만 리턴하는 메서드
     private List<StudyCafeSeatPass> findPassCandidatesBy(StudyCafePassType studyCafePassType) {
-        StudyCafeSeatPasses allPasses = studyCafeFileHandler.readStudyCafePasses();
+        StudyCafeSeatPasses allPasses = passReader.readStudyCafePasses();
         return allPasses.findPassBy(studyCafePassType);
     }
 
@@ -72,7 +77,7 @@ public class StudyCafePassMachine {
 
     //Fixed패스, 사물함 이용 선택 후 가능한 이용권만 리턴하는 메서드
     private Optional<StudyCafeLockerPass> findLockerPassCandidateBy(StudyCafeSeatPass pass) {
-        StudyCafeLockerPasses allLockerPasses = studyCafeFileHandler.readLockerPasses();
+        StudyCafeLockerPasses allLockerPasses = passReader.readLockerPasses();
         return allLockerPasses.findLockerPassBy(pass);
     }
 
