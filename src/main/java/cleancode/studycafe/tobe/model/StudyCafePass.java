@@ -8,7 +8,6 @@ public class StudyCafePass {
     private final int duration;
     private final int price;
     private final double discountRate;
-    private static final Set<StudyCafePassType> LOCKER_PASS = Set.of(StudyCafePassType.FIXED);
 
     private StudyCafePass(StudyCafePassType passType, int duration, int price, double discountRate) {
         this.passType = passType;
@@ -31,7 +30,7 @@ public class StudyCafePass {
     }
 
     public boolean cannotUseLocker() {
-        return !LOCKER_PASS.contains(this.passType);
+        return this.passType.isNotLockerType();
     }
 
     public StudyCafePassType getPassType() {
