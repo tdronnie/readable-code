@@ -61,7 +61,8 @@ public class StudyCafePassMachine {
 
     //Fixed패스 경우만 사물함 이용권 정하는 메서드
     private Optional<StudyCafeLockerPass> selectLockerPass(StudyCafePass selectedPass) {
-        if(selectedPass.getPassType() != StudyCafePassType.FIXED){
+        //Fixed 패스가 아닌가? -> 사물함 옵션을 사용할 수 있는 타입이 아닌가? (필요한 관심사)
+        if(selectedPass.doesNotFixedType()){
             return Optional.empty();
         }
 
