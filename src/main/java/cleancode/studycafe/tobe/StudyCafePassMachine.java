@@ -68,10 +68,7 @@ public class StudyCafePassMachine {
         StudyCafeLockerPass lockerPassCandidate = findLockerPassCandidateBy(selectedPass);
 
         if (lockerPassCandidate != null) {
-            outputHandler.askLockerPass(lockerPassCandidate);
-            //바로 사물함 이용권이 선택되었다는 플래그변수를 사용
-            boolean isLockerSelected = inputHandler.getLockerSelection();
-
+            boolean isLockerSelected = ioHandler.askLockerPassSelecting(lockerPassCandidate);
             if(isLockerSelected) {
                 return Optional.of(lockerPassCandidate); //Optional로 감싸서 넘긴다.
             }
