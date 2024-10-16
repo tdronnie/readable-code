@@ -33,7 +33,7 @@ public class StudyCafePassMachine {
         }
     }
 
-    //이용 패스 정하는 메서드
+    //이용할 패스 정하는 메서드
     private StudyCafePass selectPass() {
         outputHandler.askPassTypeSelection();
         StudyCafePassType passType = inputHandler.getPassTypeSelectingUserAction();
@@ -44,6 +44,7 @@ public class StudyCafePassMachine {
         return inputHandler.getSelectPass(passCandidates);
     }
 
+    //패스 선택 후 가능한 이용권들만 리턴하는 메서드
     private List<StudyCafePass> findPassCandidatesBy(StudyCafePassType studyCafePassType) {
         List<StudyCafePass> allPasses = studyCafeFileHandler.readStudyCafePasses();
 
@@ -52,7 +53,7 @@ public class StudyCafePassMachine {
                 .toList();
     }
 
-    //사물함 패스 정하는 메서드
+    //Fixed패스 경우만 사물함 이용권 정하는 메서드
     private StudyCafeLockerPass selectLockerPass(StudyCafePass selectedPass) {
         if(selectedPass.getPassType() != StudyCafePassType.FIXED){
             return null;
@@ -72,6 +73,7 @@ public class StudyCafePassMachine {
         return null;
     }
 
+    //Fixed패스, 사물함 이용 선택 후 가능한 이용권만 리턴하는 메서드
     private StudyCafeLockerPass findLockerPassCandidateBy(StudyCafePass pass) {
         List<StudyCafeLockerPass> allLockerPasses = studyCafeFileHandler.readLockerPasses();
 
