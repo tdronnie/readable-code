@@ -1,13 +1,13 @@
 package cleancode.studycafe.tobe;
 
 import cleancode.studycafe.tobe.exception.AppException;
-import cleancode.studycafe.tobe.io.PassReader;
-import cleancode.studycafe.tobe.io.StudyCafeFileHandler;
 import cleancode.studycafe.tobe.io.StudyCafeIOHandler;
 import cleancode.studycafe.tobe.model.order.StudyCafePassOrder;
 import cleancode.studycafe.tobe.model.pass.*;
 import cleancode.studycafe.tobe.model.pass.locker.StudyCafeLockerPass;
 import cleancode.studycafe.tobe.model.pass.locker.StudyCafeLockerPasses;
+import cleancode.studycafe.tobe.provider.LockerPassProvier;
+import cleancode.studycafe.tobe.provider.SeatPassProvier;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,10 +15,12 @@ import java.util.Optional;
 public class StudyCafePassMachine {
 
     private final StudyCafeIOHandler ioHandler = new StudyCafeIOHandler();
-    private final PassReader passReader;
+    private final SeatPassProvier seatPassProvier;
+    private final LockerPassProvier lockerPassProvier;
 
-    public StudyCafePassMachine(PassReader passReader) {
-        this.passReader = passReader;
+    public StudyCafePassMachine(SeatPassProvier seatPassProvier, LockerPassProvier lockerPassProvier) {
+        this.seatPassProvier = seatPassProvier;
+        this.lockerPassProvier = lockerPassProvier;
     }
 
     public void run() {
@@ -51,7 +53,7 @@ public class StudyCafePassMachine {
 
     //패스 선택 후 가능한 이용권들만 리턴하는 메서드
     private List<StudyCafeSeatPass> findPassCandidatesBy(StudyCafePassType studyCafePassType) {
-        StudyCafeSeatPasses allPasses = passReader.readStudyCafePasses();
+        StudyCafeSeatPasses allPasses = seatPassProvier.getSeatPasses();
         return allPasses.findPassBy(studyCafePassType);
     }
 
@@ -77,7 +79,7 @@ public class StudyCafePassMachine {
 
     //Fixed패스, 사물함 이용 선택 후 가능한 이용권만 리턴하는 메서드
     private Optional<StudyCafeLockerPass> findLockerPassCandidateBy(StudyCafeSeatPass pass) {
-        StudyCafeLockerPasses allLockerPasses = passReader.readLockerPasses();
+        StudyCafeLockerPasses allLockerPasses = lockerPassProvier.getLockerPasses();
         return allLockerPasses.findLockerPassBy(pass);
     }
 
