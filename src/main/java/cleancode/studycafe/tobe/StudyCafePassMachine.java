@@ -58,15 +58,7 @@ public class StudyCafePassMachine {
             return null;
         }
 
-        List<StudyCafeLockerPass> lockerPasses = studyCafeFileHandler.readLockerPasses();
-
-        StudyCafeLockerPass lockerPassCandidate = lockerPasses.stream()
-                .filter(option ->
-                        option.getPassType() == selectedPass.getPassType()
-                                && option.getDuration() == selectedPass.getDuration()
-                )
-                .findFirst()
-                .orElse(null);
+        StudyCafeLockerPass lockerPassCandidate = findLockerPassCandidateBy(selectedPass);
 
         if (lockerPassCandidate != null) {
             outputHandler.askLockerPass(lockerPassCandidate);
@@ -78,6 +70,18 @@ public class StudyCafePassMachine {
             }
         }
         return null;
+    }
+
+    private StudyCafeLockerPass findLockerPassCandidateBy(StudyCafePass pass) {
+        List<StudyCafeLockerPass> allLockerPasses = studyCafeFileHandler.readLockerPasses();
+
+        return allLockerPasses.stream()
+            .filter(lockerPass ->
+                    lockerPass.getPassType() == pass.getPassType()
+                            && lockerPass.getDuration() == pass.getDuration()
+            )
+            .findFirst()
+            .orElse(null);
     }
 
 }
