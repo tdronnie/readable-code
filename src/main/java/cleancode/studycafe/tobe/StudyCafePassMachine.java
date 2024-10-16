@@ -43,13 +43,10 @@ public class StudyCafePassMachine {
 
     //이용할 패스 정하는 메서드
     private StudyCafePass selectPass() {
-        outputHandler.askPassTypeSelection();
-        StudyCafePassType passType = inputHandler.getPassTypeSelectingUserAction();
-
+        StudyCafePassType passType = ioHandler.askPassTypeSelecting();
         List<StudyCafePass> passCandidates = findPassCandidatesBy(passType);
 
-        outputHandler.showPassListForSelection(passCandidates);
-        return inputHandler.getSelectPass(passCandidates);
+        return ioHandler.askPassSelecting(passCandidates);
     }
 
     //패스 선택 후 가능한 이용권들만 리턴하는 메서드

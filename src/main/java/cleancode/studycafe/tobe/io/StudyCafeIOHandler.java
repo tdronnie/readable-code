@@ -2,6 +2,9 @@ package cleancode.studycafe.tobe.io;
 
 import cleancode.studycafe.tobe.model.StudyCafeLockerPass;
 import cleancode.studycafe.tobe.model.StudyCafePass;
+import cleancode.studycafe.tobe.model.StudyCafePassType;
+
+import java.util.List;
 
 public class StudyCafeIOHandler {
 
@@ -26,5 +29,15 @@ public class StudyCafeIOHandler {
 
     public void showSimpleMessage(String message) {
         outputHandler.showSimpleMessage(message);
+    }
+
+    public StudyCafePassType askPassTypeSelecting() {
+        outputHandler.askPassTypeSelection();
+        return inputHandler.getPassTypeSelectingUserAction();
+    }
+
+    public StudyCafePass askPassSelecting(List<StudyCafePass> passCandidates) {
+        outputHandler.showPassListForSelection(passCandidates);
+        return inputHandler.getSelectPass(passCandidates);
     }
 }
